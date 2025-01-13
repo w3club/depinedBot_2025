@@ -1,6 +1,7 @@
 import { saveToFile, delay } from './utils/helper.js';
 import log from './utils/logger.js'
 import Mailjs from '@cemalgnlts/mailjs';
+import banner from './utils/banner.js';
 import readline from 'readline/promises';
 import {
     registerUser,
@@ -10,6 +11,7 @@ import {
 const mailjs = new Mailjs();
 
 const main = async () => {
+    log.info(banner);
     log.info(`proccesing run auto register (CTRL + C to exit)`);
     await delay(3);
     const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
