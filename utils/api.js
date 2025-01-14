@@ -59,7 +59,7 @@ export const createUserProfile = async (token, payload) => {
                 'Authorization': `Bearer ${token}`
             }
         });
-        log.info('Profile created successfully:', response.data.message);
+        log.info('Profile created successfully:', payload);
         return response.data;
     } catch (error) {
         log.error('Error creating profile:', error.response ? error.response.data : error.message);
@@ -90,6 +90,24 @@ export async function getUserInfo(token, proxy) {
     const agent = newAgent(proxy);
     try {
         const response = await axios.get('https://api.depined.org/api/user/details', {
+            headers: {
+                ...headers,
+                'Authorization': 'Bearer ' + token
+            },
+            httpsAgent: agent,
+            httpAgent: agent
+        });
+
+        return response.data;
+    } catch (error) {
+        log.error('Error fetching user info:', error.message || error);
+        return null;
+    }
+}
+export async function getUserRef(token, proxy) {
+    const agent = newAgent(proxy);
+    try {
+        const response = await axios.get('https://api.depined.org/api/referrals/stats', {
             headers: {
                 ...headers,
                 'Authorization': 'Bearer ' + token
