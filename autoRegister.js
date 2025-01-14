@@ -21,7 +21,7 @@ const main = async () => {
             const response = await getUserRef(token);
             if (!response?.data?.is_referral_active) continue;
             const reffCode = response?.data?.referral_code;
-            log.info(`Found new referral code:`, reffCode);
+            log.info(`Found new active referral code:`, reffCode);
             if (reffCode) {
                 try {
                     let account = await mailjs.createOneAccount();
