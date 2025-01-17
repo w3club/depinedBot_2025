@@ -6,24 +6,25 @@ import { readFile, delay } from './utils/helper.js'
 const main = async () => {
     log.info(banner);
     await delay(3)
-    const tokens = await readFile("tokens.txt");
-    if (tokens.length === 0) {
-        log.error('No tokens found in tokens.txt');
+    const accounts = await readFile("accounts.txt");
+    if (accounts.length === 0) {
+        log.error('No accounts found in tokens.txt');
         return;
     }
     const proxies = await readFile("proxy.txt");
-    if (proxies.length === 0) {
-        log.warn('Running without proxy...');
-    }
-
     try {
-        log.info(`Starting Program for all accounts:`, tokens.length);
+        log.info(`Starting Program for all accounts:`, accounts.length);
 
-        const accountsProcessing = tokens.map(async (token, index) => {
+        const accountsProcessing = accounts.map(async (account, index) => {
             const proxy = proxies[index % proxies.length] || null;
-            try {
-                const userData = await utils.getUserInfo(token, proxy);
 
+            const { email, password } = account.split('|')
+
+            try {
+
+                const loginRes = await utils.loginUser(email, password, proxy)
+                const token = loginRes?.data?.token
+                const userData = await utils.getUserInfo(token, proxy);
                 if (userData?.data) {
                     const { email, verified, current_tier, points_balance } = userData.data
                     log.info(`Account ${index + 1} info:`, { email, verified, current_tier, points_balance });
