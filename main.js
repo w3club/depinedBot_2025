@@ -18,7 +18,7 @@ const main = async () => {
         const accountsProcessing = accounts.map(async (account, index) => {
             const proxy = proxies[index % proxies.length] || null;
 
-            const { email, password } = account.split('|')
+            const [email, password] = account.split('|')
 
             try {
 
