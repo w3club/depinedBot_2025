@@ -30,15 +30,17 @@ export const registerUser = async (email, password) => {
     }
 };
 
-export const loginUser = async (email, password) => {
+export const loginUser = async (email, password, proxy) => {
+    const agent = newAgent(proxy);
     const url = 'https://api.depined.org/api/user/login';
-
     try {
         const response = await axios.post(url, { email, password }, {
             headers: {
                 ...headers,
                 'Content-Type': 'application/json'
-            }
+            },
+            httpsAgent: agent,
+            httpAgent: agent
         });
         log.info('User Login successfully:', response.data.message);
         return response.data;
